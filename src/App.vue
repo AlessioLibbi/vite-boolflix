@@ -17,14 +17,25 @@ export default {
 
   },
   methods: {
-    apiFilmCall() {
-      axios.get(this.store.apiFilmUrl, {
+    apiFilmCall(params) {
+      axios.get(params, {
         params: {
           query: this.store.query
         }
       }).then(resp => {
-        this.store.arrayFilm = resp.data.results
+        if (this.store.arrayFilm == "") {
+
+          this.store.arrayFilm = resp.data.results
+        } else {
+          this.store.arrayTv = resp.data.results
+        }
       })
+    },
+    searchFilm() {
+      this.store.arrayFilm = ""
+      this.apiFilmCall(this.store.apiFilmUrl),
+        this.apiFilmCall(this.store.apiSeriesUrl),
+        this.store.query = ""
     }
   }
 }
@@ -33,7 +44,7 @@ export default {
 </script>
 
 <template>
-  <NavBar @search="apiFilmCall" />
+  <NavBar @search="searchFilm" />
   <AppMain />
 </template>
 
